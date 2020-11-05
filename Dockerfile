@@ -36,7 +36,6 @@ RUN apt-get update && apt-get install -y software-properties-common curl && \
     git \
     unzip \
     supervisor \
-    ca-certificates && \
     apt-get -y autoremove && apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/* && \
     # PHP-FPM configuration
 	sed -i 's|.*error_log =.*|error_log=/proc/self/fd/2|g' 			/etc/php/${PHP_VERSION}/fpm/php-fpm.conf && \
@@ -64,7 +63,7 @@ RUN apt-get update && apt-get install -y software-properties-common curl && \
 	rm /etc/nginx/sites-available/default && rm /etc/nginx/sites-enabled/default && \
 	# Composer install and configuration
 	php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --version=1.10.16 --filename=composer
-#    composer config ithub-oauth.github.com ${GITHUB_TOKEN}
+#    composer config github-oauth.github.com ${GITHUB_TOKEN}
 
 # SSH Config
 COPY config /root/.ssh/config
