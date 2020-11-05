@@ -13,8 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build --tag laravel-docker:$PHP_VERSION --build-arg PHP_VERSION=$PHP_VERSION .
-      env: 
-        PHP_VERSION: "7.2"
+    - name: Check out the repo
+      uses: actions/checkout@v2
+    - name: Push to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+        build-args:
+          - PHP_VERSION: 7.2
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: oaklees/laravel-docker
+        tags: 
+        - 7.2
