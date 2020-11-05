@@ -15,4 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build --tag laravel-docker:7.2
+      run: docker build --tag laravel-docker:$PHP_VERSION --build-arg PHP_VERSION=$PHP_VERSION .
+      env: 
+        PHP_VERSION: "7.2"
