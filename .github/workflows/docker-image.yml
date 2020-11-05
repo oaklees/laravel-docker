@@ -18,11 +18,9 @@ jobs:
     - name: Push to GitHub Packages
       uses: docker/build-push-action@v1
       with:
-        build-args:
-          - PHP_VERSION: 7.2
+        build-args: PHP_VERSION=7.2
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
         repository: oaklees/laravel-docker
-        tags: 
-        - 7.2
+        tags: 7.2
