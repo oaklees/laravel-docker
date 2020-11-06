@@ -17,6 +17,14 @@ jobs:
     - name: Check out the repo
       uses: actions/checkout@v2
 
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
 
@@ -31,3 +39,5 @@ jobs:
           PHP_VERSION=7.2
         tags: |
           ghcr.io/oaklees/laravel-docker:7.2
+        cache-from: type=local,src=/tmp/.buildx-cache
+        cache-to: type=local,dest=/tmp/.buildx-cache
