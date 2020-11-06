@@ -12,6 +12,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        php: [7.1,7.2,7.3,7.4]
+
     steps:
 
     - name: Check out the repo
@@ -31,8 +35,8 @@ jobs:
 
     - name: Build
       run: |
-        docker build --tag ghcr.io/oaklees/laravel-docker:7.2 --build-arg PHP_VERSION=7.2 .
+        docker build --tag ghcr.io/oaklees/laravel-docker:${{ matrix.php }} --build-arg PHP_VERSION=${{ matrix.php }} .
 
     - name: Push
       run: |
-        docker push ghcr.io/oaklees/laravel-docker:7.2
+        docker push ghcr.io/oaklees/laravel-docker:${{ matrix.php }}
