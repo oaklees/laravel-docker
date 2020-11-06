@@ -17,14 +17,17 @@ jobs:
     - name: Check out the repo
       uses: actions/checkout@v2
 
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    - name: Push to GitHub Packages
+    - name: Build & Push to GitHub Packages
       uses: docker/build-push-action@v2
       with:
         push: true
         build-args: |
           PHP_VERSION=7.2
         tags: |
-          oaklees/laravel-docker:7.2
+          laravel-docker:7.2
