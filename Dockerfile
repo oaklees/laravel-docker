@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y software-properties-common curl && \
     zip \
     git \
     unzip \
-    supervisor \
+    supervisor && \
     apt-get -y autoremove && apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/* && \
     # PHP-FPM configuration
 	sed -i 's|.*error_log =.*|error_log=/proc/self/fd/2|g' 			/etc/php/${PHP_VERSION}/fpm/php-fpm.conf && \
