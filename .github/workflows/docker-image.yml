@@ -34,6 +34,8 @@ jobs:
     - name: Build & Push to GitHub Packages
       uses: docker/build-push-action@v2
       with:
+        secrets: |
+          GIT_AUTH_TOKEN=${{ secrets.DOCKER_LOGIN }}
         push: true
         build-args: |
           PHP_VERSION=7.2
