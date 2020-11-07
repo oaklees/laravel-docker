@@ -15,24 +15,25 @@ RUN chmod +x /bin/wait-for-it.sh
 RUN apt-get update && apt-get install -y software-properties-common curl && \
     LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php && add-apt-repository ppa:nginx/stable &&  \
     apt-get update && apt-get install -y --no-install-recommends \
-    php${PHP_VERSION}-fpm \
-    php${PHP_VERSION}-cli \
-    php${PHP_VERSION}-ldap \
-    php${PHP_VERSION}-gd \
+    php${PHP_VERSION}-bcmath \
     php${PHP_VERSION}-curl \
+    php${PHP_VERSION}-cli \
     php${PHP_VERSION}-dom \
-    php${PHP_VERSION}-redis \
+    php${PHP_VERSION}-fpm \
+    php${PHP_VERSION}-gd \
+    php${PHP_VERSION}-gmp \
+    php${PHP_VERSION}-igbinary \
+    php${PHP_VERSION}-intl \
     php${PHP_VERSION}-imap \
+    php${PHP_VERSION}-ldap \
+    php${PHP_VERSION}-mbstring \
     php${PHP_VERSION}-mysql \
     php${PHP_VERSION}-pcov \
+    php${PHP_VERSION}-readline \
+    php${PHP_VERSION}-redis \
     php${PHP_VERSION}-soap \
     php${PHP_VERSION}-sqlite \
-    php${PHP_VERSION}-mbstring \
     php${PHP_VERSION}-zip \
-    php${PHP_VERSION}-bcmath \
-    php${PHP_VERSION}-intl \
-    php${PHP_VERSION}-readline \
-    php${PHP_VERSION}-igbinary \
     nginx \
     zip \
     git \
