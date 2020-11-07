@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y software-properties-common curl && \
     php${PHP_VERSION}-redis \
     php${PHP_VERSION}-imap \
     php${PHP_VERSION}-mysql \
+    php${PHP_VERSION}-pcov \
     php${PHP_VERSION}-soap \
     php${PHP_VERSION}-sqlite \
     php${PHP_VERSION}-mbstring \
