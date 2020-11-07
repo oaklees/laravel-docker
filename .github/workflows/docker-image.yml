@@ -28,16 +28,9 @@ jobs:
       run: |
         docker login ghcr.io --username $GITHUB_ACTOR --password ${{ secrets.DOCKER_LOGIN }}
 
-    - name: Pull image for caching
-      run: |
-        docker pull $REGISTRY_IMAGE:${{ matrix.php }}
-        docker pull ubuntu:18.04
-
     - name: Build
       run: |
-        docker build --cache-from=$CACHE_IMAGES --tag $REGISTRY_IMAGE:${{ matrix.php }} --build-arg PHP_VERSION=${{ matrix.php }} .
-      env:
-        CACHE_IMAGES: ubuntu:18.04,$REGISTRY_IMAGE:${{ matrix.php }}
+        docker build --tag $REGISTRY_IMAGE:${{ matrix.php }} --build-arg PHP_VERSION=${{ matrix.php }} .
 
     - name: Push
       run: |
