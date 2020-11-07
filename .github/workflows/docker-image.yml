@@ -24,13 +24,13 @@ jobs:
     - name: Checkout the repo
       uses: actions/checkout@v2
 
-    - name: Pull image for caching
-      run: |
-        docker pull $REGISTRY_IMAGE:${{ matrix.php }}
-
     - name: Login to docker
       run: |
         docker login ghcr.io --username $GITHUB_ACTOR --password ${{ secrets.DOCKER_LOGIN }}
+
+    - name: Pull image for caching
+      run: |
+        docker pull $REGISTRY_IMAGE:${{ matrix.php }}
 
     - name: Build
       run: |
