@@ -30,13 +30,13 @@ jobs:
 
     - name: Pull image for caching
       run: |
-        docker pull $REGISTRY_IMAGE:${{ matrix.php }}
+        docker pull $REGISTRY_IMAGE:${{ matrix.php }} ubuntu:18
 
     - name: Build
       run: |
         docker build --cache-from=$CACHE_IMAGES --tag $REGISTRY_IMAGE:${{ matrix.php }} --build-arg PHP_VERSION=${{ matrix.php }} .
       env:
-        CACHE_IMAGES: $REGISTRY_IMAGE:${{ matrix.php }}
+        CACHE_IMAGES: $REGISTRY_IMAGE:${{ matrix.php }},ubuntu:18
 
     - name: Push
       run: |
