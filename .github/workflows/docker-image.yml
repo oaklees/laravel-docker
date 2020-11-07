@@ -37,7 +37,7 @@ jobs:
       run: |
         docker build --cache-from=$CACHE_IMAGES --tag $REGISTRY_IMAGE:${{ matrix.php }} --build-arg PHP_VERSION=${{ matrix.php }} .
       env:
-        CACHE_IMAGES: $REGISTRY_IMAGE:${{ matrix.php }},ubuntu:18.04
+        CACHE_IMAGES: ubuntu:18.04,$REGISTRY_IMAGE:${{ matrix.php }}
 
     - name: Push
       run: |
