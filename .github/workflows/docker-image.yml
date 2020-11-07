@@ -31,7 +31,7 @@ jobs:
     - name: Pull image for caching
       run: |
         docker pull $REGISTRY_IMAGE:${{ matrix.php }}
-        docker pull ubuntu:18}
+        docker pull ubuntu:18
 
     - name: Build
       run: |
