@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 set -e
 
@@ -99,7 +99,7 @@ _did_receive_sigterm() {
 }
 
 _start_supervisor() {
-  /usr/bin/supervisord &
+  /usr/bin/supervisord -c /etc/supervisor/supervisord.conf &
   SUPERVISOR_PID=$!
 }
 
