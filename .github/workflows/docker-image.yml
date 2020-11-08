@@ -2,9 +2,6 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 env:
   REGISTRY_IMAGE: ghcr.io/oaklees/laravel-docker
@@ -14,10 +11,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        php: [7.1, 7.2, 7.3, 7.4]
 
     steps:
 
@@ -30,8 +23,8 @@ jobs:
 
     - name: Build
       run: |
-        docker build --tag $REGISTRY_IMAGE:${{ matrix.php }} --build-arg PHP_VERSION=${{ matrix.php }} .
+        docker build --tag $REGISTRY_IMAGE:7.3-alpine .
 
     - name: Push
       run: |
-        docker push $REGISTRY_IMAGE:${{ matrix.php }}
+        docker push $REGISTRY_IMAGE:7.3-alpine
