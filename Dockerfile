@@ -1,4 +1,4 @@
-FROM alpine:3.10 as builder
+FROM alpine:3.8 as builder
 
 # Compile pcov extension
 RUN apk --no-cache add build-base php7-dev git && \
