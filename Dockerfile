@@ -32,6 +32,7 @@ RUN apk --no-cache add \
     php7-ldap \
     php7-mbstring \
     php7-pdo_mysql \
+    php7-pdo_sqlite \
     php7-json \
     php7-phar \
     php7-xmlwriter \
