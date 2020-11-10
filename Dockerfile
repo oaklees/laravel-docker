@@ -27,7 +27,6 @@ RUN apk --no-cache add \
     php7-fpm \
     php7-gd \
     php7-gmp \
-    php7-igbinary \
     php7-opcache \
     php7-intl \
     php7-imap \
