@@ -8,7 +8,7 @@ env:
 
 jobs:
 
-  php-7.1:
+  php-71:
 
     runs-on: ubuntu-latest
 
@@ -29,7 +29,7 @@ jobs:
       run: |
         docker push $REGISTRY_IMAGE:7.1-alpine
 
-  php-7.2:
+  php-72:
 
     runs-on: ubuntu-latest
 
@@ -50,7 +50,7 @@ jobs:
         run: |
           docker push $REGISTRY_IMAGE:7.2-alpine
 
-  php-7.3:
+  php-73:
 
     runs-on: ubuntu-latest
 
