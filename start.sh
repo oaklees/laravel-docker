@@ -11,7 +11,7 @@ ARTISAN="/var/www/artisan"
 ##############################
 
 _verify_artisan_is_present() {
-  if [[ ! -e $ARTISAN ]]; then
+  if [ ! -e $ARTISAN ]; then
     echo "Artisan not found."
     exit 1
   fi
@@ -28,7 +28,7 @@ _register_trap() {
 _validate_role() {
 
   for VALID_ROLE in "app" "queue" "queue.database" "scheduler"; do
-    if [[ $ROLE = "$VALID_ROLE" ]]; then
+    if [ $ROLE = "$VALID_ROLE" ]; then
       return 0
     fi
   done
@@ -38,7 +38,7 @@ _validate_role() {
 }
 
 _prepare_app_for_production() {
-  if [[ $ENVIRONMENT = production* ]]; then
+  if [ $ENVIRONMENT = production* ]; then
       echo "Caching for production.."
       php ${ARTISAN} config:cache
       php ${ARTISAN} view:cache
@@ -48,12 +48,12 @@ _prepare_app_for_production() {
 
 _run_database_migration() {
 
-  if [[ -n "$SKIP_MIGRATIONS" ]]; then
+  if [ -n "$SKIP_MIGRATIONS" ]; then
     echo "Skipping migrations."
     return
   fi
 
-  if [[ -z "$DB_HOST" ]]; then
+  if [ -z "$DB_HOST" ]; then
     echo "Skipping migrations as DB_HOST not defined."
     return
   fi
@@ -63,35 +63,36 @@ _run_database_migration() {
   _wait_for_database_to_be_available
 
   c=0
+  i=1
 
   while ! (php ${ARTISAN} migrate --force); do
-      ((c++)) && ((c == 6)) && c=0 && echo -e "\nFailed to run migrations" && break
-      echo -e "\nMigrations unsuccessful, waiting for retry.. ($c of 5)"
+      c=`expr $c + $i` && [ $c == 6 ] && c=0 && echo "Failed to run migrations" && break
+      echo "Migrations unsuccessful, waiting for retry.. ($c of 5)"
       sleep 1
   done
 }
 
 _wait_for_database_to_be_available() {
-  if [[ $DB_CONNECTION = "mysql" && -n $DB_HOST ]]; then
+  if [ "$DB_CONNECTION" = "mysql" ] && [ -n $DB_HOST ]; then
       wait-for-it.sh -t 60 "$DB_HOST:$DB_PORT"
   fi
 }
 
 _did_receive_sigterm() {
 
-  if [[ -n $SUPERVISOR_PID ]]; then
+  if [ -n $SUPERVISOR_PID ]; then
     _stop_supervisor
   fi
 
-  if [[ -n $HORIZON_PID ]]; then
+  if [ -n $HORIZON_PID ]; then
     _stop_horizon
   fi
 
-  if [[ -n $DATABASE_WORKER_PID ]]; then
+  if [ -n $DATABASE_WORKER_PID ]; then
     _stop_database_worker
   fi
 
-  if [[ $ROLE = "scheduler" ]]; then
+  if [ "$ROLE" = "scheduler" ]; then
     _stop_scheduler
   fi
 
@@ -138,13 +139,13 @@ _stop_database_worker () {
 }
 
 _wait_on_active_processes() {
-  if [[ -n $SUPERVISOR_PID ]]; then
+  if [ -n "$SUPERVISOR_PID" ]; then
     wait $SUPERVISOR_PID
   fi
-  if [[ -n $DATABASE_WORKER_PID ]]; then
+  if [ -n "$DATABASE_WORKER_PID" ]; then
     wait $DATABASE_WORKER_PID
   fi
-  if [[ -n $DATABASE_WORKER_PID ]]; then
+  if [ -n "$DATABASE_WORKER_PID" ]; then
     wait $DATABASE_WORKER_PID
   fi
 }
@@ -182,21 +183,21 @@ _print_role_and_environment
 _register_trap
 _validate_role
 
-if [[ $ROLE = "scheduler" ]]; then
+if [ "$ROLE" = "scheduler" ]; then
   _start_scheduler
 fi
 
 _prepare_app_for_production
 
-if [[ $ROLE = "app" ]]; then
+if [ "$ROLE" = "app" ]; then
   _run_database_migration
 fi
 
-if [[ $ROLE = "queue" ]]; then
+if [ "$ROLE" = "queue" ]; then
   _start_horizon
 fi
 
-if [[ $ROLE = "queue.database" ]]; then
+if [ "$ROLE" = "queue.database" ]; then
   _start_database_queue_worker
 fi
 

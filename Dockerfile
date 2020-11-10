@@ -1,4 +1,6 @@
-FROM alpine:3.8 as builder
+ARG ALPINE_VERSION
+
+FROM alpine:${ALPINE_VERSION} as builder
 
 # Compile pcov extension
 RUN apk --no-cache add build-base php7-dev git && \
@@ -6,7 +8,7 @@ RUN apk --no-cache add build-base php7-dev git && \
     ./configure --enable-pcov && \
     make && make test && make install
 
-FROM alpine:3.10 as base
+FROM alpine:${ALPINE_VERSION} as base
 
 LABEL maintainer="Andrew Lees"
 ENV COMPOSER_ALLOW_SUPERUSER=1 PHP_OPCACHE_VALIDATE_TIMESTAMPS=0
@@ -45,6 +47,7 @@ RUN apk --no-cache add \
     php7-soap \
     php7-sqlite3 \
     php7-zip \
+    curl \
     git \
     openssh \
     nginx \
