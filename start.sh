@@ -25,6 +25,12 @@ _register_trap() {
   trap _did_receive_sigterm SIGTERM
 }
 
+_enable_development_extensions_if_required() {
+  if [ ! -z "${XDEBUG_ENABLED:-}" ] && [ "$XDEBUG_ENABLED" = "1" ] ; then
+    sed -i "s/;zend_extension=.*/zend_extension=xdebug.so/g" /etc/php7/conf.d/00_xdebug.ini
+  fi
+}
+
 _validate_role() {
 
   for VALID_ROLE in "app" "queue" "queue.database" "scheduler"; do
@@ -80,15 +86,15 @@ _wait_for_database_to_be_available() {
 
 _did_receive_sigterm() {
 
-  if [ -n $SUPERVISOR_PID ]; then
+  if [ -n "$SUPERVISOR_PID" ]; then
     _stop_supervisor
   fi
 
-  if [ -n $HORIZON_PID ]; then
+  if [ -n "$HORIZON_PID" ]; then
     _stop_horizon
   fi
 
-  if [ -n $DATABASE_WORKER_PID ]; then
+  if [ -n "$DATABASE_WORKER_PID" ]; then
     _stop_database_worker
   fi
 
@@ -179,6 +185,7 @@ _stop_scheduler() {
 ####################
 
 _verify_artisan_is_present
+_enable_development_extensions_if_required
 _print_role_and_environment
 _register_trap
 _validate_role

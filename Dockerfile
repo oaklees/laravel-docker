@@ -25,12 +25,10 @@ RUN apk --no-cache add \
     php7-cli \
     php7-dom \
     php7-fpm \
-    php7-gd \
     php7-gmp \
     php7-opcache \
     php7-intl \
     php7-imap \
-    php7-ldap \
     php7-mbstring \
     php7-pdo_mysql \
     php7-pdo_sqlite \
@@ -45,6 +43,7 @@ RUN apk --no-cache add \
     php7-redis \
     php7-soap \
     php7-sqlite3 \
+    php7-xdebug \
     php7-zip \
     curl \
     git \
@@ -54,7 +53,7 @@ RUN apk --no-cache add \
 
 # Copy over our compiled pcov extension
 COPY --from=builder /usr/lib/php7/modules/pcov.so /usr/lib/php7/modules/pcov.so
-COPY ./00_pcov.ini /etc/php7/conf.d/
+COPY ./00_pcov.ini ./00_xdebug.ini /etc/php7/conf.d/
 
 # PHP-FPM configuration
 RUN sed -i 's|.*error_log =.*|error_log=/proc/self/fd/2|g' 			/etc/php7/php-fpm.conf && \
@@ -78,10 +77,9 @@ RUN sed -i 's|.*error_log =.*|error_log=/proc/self/fd/2|g' 			/etc/php7/php-fpm.
     sed -i 's|.*revalidate_freq.*|opcache.revalidate_freq=0|g' 					/etc/php7/php.ini && \
     sed -i 's|.*upload_max_filesize.*|upload_max_filesize = 128M|g' 			/etc/php7/php.ini && \
     sed -i 's|.*post_max_size.*|post_max_size = 128M|g' 						/etc/php7/php.ini && \
-    sed -i 's|.*variables_order.*|variables_order=EGPCS|g' 						/etc/php7/php.ini
-
-# Composer install and configuration
-RUN	php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --version=1.10.16 --filename=composer
+    sed -i 's|.*variables_order.*|variables_order=EGPCS|g' 						/etc/php7/php.ini && \
+    # Composer install and configuration
+    php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --version=1.10.16 --filename=composer
 #    composer config github-oauth.github.com ${GITHUB_TOKEN}
 
 # Supervisor and Nginx config
