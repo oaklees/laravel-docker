@@ -58,7 +58,9 @@ COPY ./00_pcov.ini ./00_xdebug.ini /etc/php7/conf.d/
 # PHP-FPM configuration
 RUN sed -i 's|.*error_log =.*|error_log=/proc/self/fd/2|g' 			/etc/php7/php-fpm.conf && \
     # PHP-FPM pool configuration
-    sed -i 's|.*listen =.*|listen=9000|g' 							/etc/php7/php-fpm.d/www.conf && \
+    sed -i 's|.*listen =.*|listen = 9000|g' 						/etc/php7/php-fpm.d/www.conf && \
+    sed -i 's|.*user =.*|user = nginx|g' 							/etc/php7/php-fpm.d/www.conf && \
+    sed -i 's|.*group =.*|group = nginx|g' 							/etc/php7/php-fpm.d/www.conf && \
     sed -i 's|.*max_children =.*|pm.max_children = 50|g' 			/etc/php7/php-fpm.d/www.conf && \
     sed -i 's|.*min_spare_servers =.*|pm.min_spare_servers = 5|g' 	/etc/php7/php-fpm.d/www.conf && \
     sed -i 's|.*max_spare_servers =.*|pm.max_spare_servers = 45|g' 	/etc/php7/php-fpm.d/www.conf && \
