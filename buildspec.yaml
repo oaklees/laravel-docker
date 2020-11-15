@@ -16,7 +16,7 @@ phases:
       - IMAGE_TAG=${COMMIT_HASH}
   build:
     commands:
-      - docker build --tag $REGISTRY/$PROJECT_NAME:$IMAGE_TAG --build-arg ALPINE_VERSION=3.11 .
+      - docker build --tag $REGISTRY/$IMAGE_NAME:$IMAGE_TAG --build-arg ALPINE_VERSION=3.11 .
   post_build:
     commands:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
