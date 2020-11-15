@@ -13,14 +13,13 @@ phases:
     commands:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REGISTRY
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH}
+      - IMAGE_TAG=7.3-alpine
   build:
     commands:
       - docker build --tag $REGISTRY/$IMAGE_NAME:$IMAGE_TAG --build-arg ALPINE_VERSION=3.11 .
   post_build:
     commands:
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - '[ "$BRANCH" = "master" ] && docker push $REPOSITORY_URI:latest'
+      - docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
       - echo Writing image definitions file...
       - printf '[{"name":"%s","imageUri":"%s"}]' $PROJECT_NAME $REPOSITORY_URI:$IMAGE_TAG  > imagedefinitions.json
 artifacts:
