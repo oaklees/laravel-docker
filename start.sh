@@ -43,15 +43,6 @@ _validate_role() {
   exit 1
 }
 
-_prepare_app_for_production() {
-  if [ $ENVIRONMENT = production* ]; then
-      echo "Caching for production.."
-      php ${ARTISAN} config:cache
-      php ${ARTISAN} view:cache
-      php ${ARTISAN} route:cache || echo 'Route caching not possible.'
-  fi
-}
-
 _run_database_migration() {
 
   if [ -n "$SKIP_MIGRATIONS" ]; then
@@ -193,8 +184,6 @@ _validate_role
 if [ "$ROLE" = "scheduler" ]; then
   _start_scheduler
 fi
-
-_prepare_app_for_production
 
 if [ "$ROLE" = "app" ]; then
   _run_database_migration
