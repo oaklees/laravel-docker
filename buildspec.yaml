@@ -1,0 +1,27 @@
+version: 0.2
+
+env:
+  variables:
+    IMAGE_NAME: "laravel-docker"
+    REGISTRY: "458118949611.dkr.ecr.eu-west-2.amazonaws.com"
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REGISTRY
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH}
+  build:
+    commands:
+      - docker build --tag $REGISTRY/$PROJECT_NAME:$IMAGE_TAG --build-arg ALPINE_VERSION=3.11 .
+  post_build:
+    commands:
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - '[ "$BRANCH" = "master" ] && docker push $REPOSITORY_URI:latest'
+      - echo Writing image definitions file...
+      - printf '[{"name":"%s","imageUri":"%s"}]' $PROJECT_NAME $REPOSITORY_URI:$IMAGE_TAG  > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
