@@ -1,12 +1,4 @@
-ARG ALPINE_VERSION
-
-FROM alpine:${ALPINE_VERSION} as builder
-
-# Compile pcov extension
-RUN apk --no-cache add build-base php7-dev git && \
-    git clone https://github.com/krakjoe/pcov.git && cd pcov && phpize && \
-    ./configure --enable-pcov && \
-    make && make test && make install
+ARG ALPINE_VERSION=3.11
 
 FROM alpine:${ALPINE_VERSION} as base
 
@@ -31,7 +23,6 @@ RUN apk --no-cache add \
     php7-imap \
     php7-mbstring \
     php7-pdo_mysql \
-    php7-pdo_sqlite \
     php7-json \
     php7-phar \
     php7-xmlwriter \
@@ -42,18 +33,10 @@ RUN apk --no-cache add \
     php7-simplexml \
     php7-redis \
     php7-soap \
-    php7-sqlite3 \
-    php7-xdebug \
     php7-zip \
     curl \
-    git \
-    openssh \
     nginx \
     supervisor
-
-# Copy over our compiled pcov extension
-COPY --from=builder /usr/lib/php7/modules/pcov.so /usr/lib/php7/modules/pcov.so
-COPY ./00_pcov.ini ./00_xdebug.ini /etc/php7/conf.d/
 
 # PHP-FPM configuration
 RUN sed -i 's|.*error_log =.*|error_log=/proc/self/fd/2|g' 			/etc/php7/php-fpm.conf && \
@@ -75,14 +58,11 @@ RUN sed -i 's|.*error_log =.*|error_log=/proc/self/fd/2|g' 			/etc/php7/php-fpm.
     sed -i 's|.*memory_consumption.*|opcache.memory_consumption=256|g'			/etc/php7/php.ini && \
     sed -i 's|.*interned_strings_buffer.*|opcache.interned_strings_buffer=64|g' /etc/php7/php.ini && \
     sed -i 's|.*max_accelerated_files.*|opcache.max_accelerated_files=32531|g' 	/etc/php7/php.ini && \
-    sed -i 's|.*validate_timestamps.*|opcache.validate_timestamps=\${PHP_OPCACHE_VALIDATE_TIMESTAMPS}|g' /etc/php7/php.ini && \
+    sed -i 's|.*validate_timestamps.*|opcache.validate_timestamps=0|g' /etc/php7/php.ini && \
     sed -i 's|.*revalidate_freq.*|opcache.revalidate_freq=0|g' 					/etc/php7/php.ini && \
     sed -i 's|.*upload_max_filesize.*|upload_max_filesize = 128M|g' 			/etc/php7/php.ini && \
     sed -i 's|.*post_max_size.*|post_max_size = 128M|g' 						/etc/php7/php.ini && \
-    sed -i 's|.*variables_order.*|variables_order=EGPCS|g' 						/etc/php7/php.ini && \
-    # Composer install and configuration
-    php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --version=1.10.16 --filename=composer
-#    composer config github-oauth.github.com ${GITHUB_TOKEN}
+    sed -i 's|.*variables_order.*|variables_order=EGPCS|g' 						/etc/php7/php.ini
 
 # Supervisor and Nginx config
 COPY supervisor /etc/supervisor
