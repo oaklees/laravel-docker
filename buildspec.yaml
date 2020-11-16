@@ -19,5 +19,5 @@ phases:
       - docker build --tag $REGISTRY/$IMAGE_NAME:$PHP_VERSION-dev dev
   post_build:
     commands:
-      - docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG
-      - docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG-dev
+      - docker push $REGISTRY/$IMAGE_NAME:$PHP_VERSION
+      - docker push $REGISTRY/$IMAGE_NAME:$PHP_VERSION-dev
