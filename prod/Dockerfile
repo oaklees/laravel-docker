@@ -13,6 +13,7 @@ RUN chmod +x /bin/wait-for-it.sh
 # Add necessary packages, namely PHP and Nginx.
 RUN apk --no-cache add \
     php7-bcmath \
+    php7-calendar \
     php7-curl \
     php7-cli \
     php7-dom \
