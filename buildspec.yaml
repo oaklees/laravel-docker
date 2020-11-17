@@ -3,7 +3,6 @@ version: 0.2
 env:
   variables:
     IMAGE_NAME: "laravel-docker"
-    PHP_VERSION: 7.3
     REGISTRY: "458118949611.dkr.ecr.eu-west-2.amazonaws.com"
 
 phases:
@@ -15,9 +14,13 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REGISTRY
   build:
     commands:
-      - docker build --tag $REGISTRY/$IMAGE_NAME:$PHP_VERSION prod
-      - docker build --tag $REGISTRY/$IMAGE_NAME:$PHP_VERSION-dev dev
+      - docker build --tag $REGISTRY/$IMAGE_NAME:7.3 --build-arg ALPINE_VERSION=3.11 prod
+      - docker build --tag $REGISTRY/$IMAGE_NAME:7.3-dev --build-arg ALPINE_VERSION=3.11 --build-arg BASE_VERSION=7.3 dev
+      - docker build --tag $REGISTRY/$IMAGE_NAME:7.2 --build-arg ALPINE_VERSION=3.9 prod
+      - docker build --tag $REGISTRY/$IMAGE_NAME:7.2-dev --build-arg ALPINE_VERSION=3.9 --build-arg BASE_VERSION=7.2 dev
   post_build:
     commands:
-      - docker push $REGISTRY/$IMAGE_NAME:$PHP_VERSION
-      - docker push $REGISTRY/$IMAGE_NAME:$PHP_VERSION-dev
+      - docker push $REGISTRY/$IMAGE_NAME:7.2
+      - docker push $REGISTRY/$IMAGE_NAME:7.2-dev
+      - docker push $REGISTRY/$IMAGE_NAME:7.3
+      - docker push $REGISTRY/$IMAGE_NAME:7.3-dev
