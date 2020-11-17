@@ -1,4 +1,6 @@
-FROM 458118949611.dkr.ecr.eu-west-2.amazonaws.com/laravel-docker:7.3 as builder
+ARG BASE_VERSION=7.2
+
+FROM 458118949611.dkr.ecr.eu-west-2.amazonaws.com/laravel-docker:${BASE_VERSION} as builder
 
 # Compile pcov extension
 RUN apk --no-cache add build-base php7-dev git && \
@@ -6,7 +8,7 @@ RUN apk --no-cache add build-base php7-dev git && \
     ./configure --enable-pcov && \
     make && make test && make install
 
-FROM 458118949611.dkr.ecr.eu-west-2.amazonaws.com/laravel-docker:7.3 as base
+FROM 458118949611.dkr.ecr.eu-west-2.amazonaws.com/laravel-docker:${BASE_VERSION} as base
 
 # Add necessary packages, namely PHP and Nginx.
 RUN apk --no-cache add \
