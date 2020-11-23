@@ -18,6 +18,7 @@ RUN apk --no-cache add \
     php7-cli \
     php7-dom \
     php7-fpm \
+    php7-gd \
     php7-gmp \
     php7-opcache \
     php7-intl \
