@@ -14,12 +14,16 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REGISTRY
   build:
     commands:
-      - docker build --tag $REGISTRY/$IMAGE_NAME:7.3 --build-arg ALPINE_VERSION=3.11 prod
-      - docker build --tag $REGISTRY/$IMAGE_NAME:7.3-dev --build-arg ALPINE_VERSION=3.11 --build-arg BASE_VERSION=7.3 dev
+      - docker build --tag $REGISTRY/$IMAGE_NAME:7.1 --build-arg ALPINE_VERSION=3.7 prod
+      - docker build --tag $REGISTRY/$IMAGE_NAME:7.1-dev --build-arg ALPINE_VERSION=3.7 --build-arg BASE_VERSION=7.1 dev
       - docker build --tag $REGISTRY/$IMAGE_NAME:7.2 --build-arg ALPINE_VERSION=3.9 prod
       - docker build --tag $REGISTRY/$IMAGE_NAME:7.2-dev --build-arg ALPINE_VERSION=3.9 --build-arg BASE_VERSION=7.2 dev
+      - docker build --tag $REGISTRY/$IMAGE_NAME:7.3 --build-arg ALPINE_VERSION=3.11 prod
+      - docker build --tag $REGISTRY/$IMAGE_NAME:7.3-dev --build-arg ALPINE_VERSION=3.11 --build-arg BASE_VERSION=7.3 dev
   post_build:
     commands:
+      - docker push $REGISTRY/$IMAGE_NAME:7.1
+      - docker push $REGISTRY/$IMAGE_NAME:7.1-dev
       - docker push $REGISTRY/$IMAGE_NAME:7.2
       - docker push $REGISTRY/$IMAGE_NAME:7.2-dev
       - docker push $REGISTRY/$IMAGE_NAME:7.3
